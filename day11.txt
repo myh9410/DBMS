@@ -1,0 +1,91 @@
+
+
+
+# MySQL Server 기본 인코딩을 UTF8로 설정하면 그 후부터 만들어지는 데이터베이스의 기본 인코딩이 UTF8로 설정 됨...
+
+# /etc/my.cnf 파일은 mysql 설정 파일임.
+  이 파일을 통해서 server 기본 인코딩을 설정할 수 있음
+
+  my.cnf 파일에
+  [mysqld] 아래 행에 character-set-server = utf8
+  내용을 추가하면 기본 인코딩을 설정할 수 있음
+
+  파일 내용 추가 후에 systemctl restart mysqld
+
+
+# show tables; <-- 선택 돼 있는 데이터베이스에 만들어져 있는
+		   테이블에 목록을 출력
+
+# select * from memberTBL;
+  위 쿼리에서 사용 된 *은 모든 컬럼이라는 의미를 갖게 됨
+
+  결론적으로 memberTBL에 있는 모든 컬럼에 값을 전부 다 출력
+
+# select memberName, memberAddress from memberTBL; 
+  위 쿼리는 memberTBL에 memberName, memberAddress 컬럼에
+  값을 출력
+
+# select 쿼리를 전송할 때 실제 테이블에 컬럼에 순서와
+  다르게 컬럼을 출력시킬 수 있음
+
+  예) 실제 테이블에 컬럼들은 아이디, 이름, 주소 순으로
+  만들어져 있어도 select할 때 이름, 아이디, 주소 순으로
+  순서를 원하는데로 바꿔서 출력이 가능함
+
+# SELECT * from memberTBL where memberName = "당탕이"; 
+  memberTBL에 memberName이라는 컬럼에 값이 당탕이인 행에
+  모든 컬럼을 출력
+
+# select 쿼리를 사용할 때 where를 통해 조건을 걸 수 있음
+  조건에 만족하는 행만 정보를 뽑을 수 있음
+
+
+
+
+# select 쿼리는 지정한 컬럼에 값을 조회한다
+
+# create schema korea1; <-- korea1이라는 데이터베이스를 생성하
+			    는 SQL임
+
+# drop schema korea1; <-- korea1이라는 데이터베이스를 삭제함
+
+# SQL을 사용해서 Workbench에서 데이터베이스를 생성했을 때
+  새로고침을 안 하면 안 보임..
+
+# create schema `my DB`; <-- 데이터베이스에 이름에 공백을
+				사용하고 싶을 때는 백쿼터로
+				묶어서 사용해야 함
+
+
+# 데이터베이스 또는 테이블에 이름을 작명할 때는
+  누가봐도 여기에 뭐가 저장 돼 있는 지 알 수 있게
+  이름을 작명해야 함...
+
+
+create table myTBL(
+	id CHAR(15) NOT NULL primary key,
+	age INT,
+	address CHAR(30) NOT NULL
+);
+
+# 위에 커리는 myTBL이라는 테이블을 지정 돼 있는 데이터베이스에 생성하는 쿼리임.
+컬럼을 id, age, address라는 3개의 컬럼을 갖는 테이블로 만들게 됨. 
+
+# drop table myTBL; <-- myTBL 테이블을 삭제
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,60 @@
+# 가상 컴퓨터의 Network 어댑터가 NAT라는 것으로 설정되어 있으면, Real PC랑 통신할 때 다른 ip로 변환되어져서 통신하게 된다.
+
+#ip의 제한을 두는것을 100.100.100.1로 잡음
+
+# Limit to Hosts Matching을 100.100.100.0/255.255.255.0 로 설정
+	100.100.100.1~254까지의 IP들을 접속 허용시킴. 나머지는 다 허용하지 않음.
+
+# IP 범위를 통한 IP제한을 구현할 때는 우리 회사에서 사용하는 IP,대역을 가지고 제한함.
+
+#권한 : MySQL에서 어떤 쿼리를 사용할 수 있는지를 의미.
+ex) korea1이라는 계정이 select 권한이 있다는 것 = select 쿼리를 사용할 수 있음.
+
+#MySQL에 계정을 만들었을 때 기본적으로 아무 권한도 부여되어 있지 않음.
+
+#create user ceo@'%' identified by 'P@ssw0rd'
+		ceo	> 만들 계정의 이름
+		'%'	> 접근 제한하는 ip주소	%는 어떤 ip주소든 접근 가능
+		'P@ssw0rd'	> 만들 계정이 사용할 비밀번호
+
+# set password for ceo=password('P@ssw0rd2');
+ > ceo계정의 비밀번호 바꾸는 쿼리 'P@ssw0rd2'로 바꿈
+
+# 비밀번호 복잡성 제한을 MySQL이 하는것이 아니라 Workbench에서 제한하는 것
+
+#grant select , update on *.* to ceo@'%';
+위 쿼리는 ceo라는 계정에 권한을 모든 데이터베이스를 대상으로 select, update 쿼리를 사용할 수 있게 권한을 부여하는 쿼리임.
+
+#select * from mysql.user;
+mysql의 계정들 확인 가능한 쿼리alter
+계정의 이름, 접근 제한 IP 확인 가능.
+비밀번호는 암호화되어있음. 계정의 권한도 확인 가능(select,insert,update 등)
+
+#update mysql.user set Host = '100.100.100.1' where User = 'ceo';
+위의 쿼리는 결국 ceo라는 계정의 접근 제한 IP를 100.100.100.1로 변경하기 위해 사용하는 쿼리임..
+
+#flush privileges;
+> 계정정보 변경한 것 적용시키는 쿼리
+
+#grant select, insert, update, delete on shopDB.* to staff@'%';
+위 쿼리는 staff라는 계정을 shopDB라는 테이블에 select, insert, update, delete 쿼리를 사용할 수 있게 권한을 허용하겠다는 의미
+
+#revoke select, update on shopDB.* from staff@'%';
+ > 위 쿼리는 staff라는 계정을 shopDB라는 데이터베이스에 부여한 권한 중에서 select,update 권한을 부여를 취소하겠다 or 부여한 권한을 제거하겠다. 라는 의미
+
+#select 쿼리는 저장되어 있는 테이블에 값을 확인하는 쿼리.
+#저장된 데이터가 많으면 select 쿼리를 수행하는데 부하도 높고, 쿼리 실행되는데 시간도 오래 걸림.
+#그래서 테이블에 컬럼에 목록을 확인하는 방법으로 select 쿼리를 쓰기에는 부적합함.
+
+SELECT     
+	emp_no '사원번호', 
+	birth_date '출생일', 
+	first_name '이름', 
+	last_name '성', 
+	gender '성별', 
+	hire_date '입사일'
+FROM
+	employees;
+#빗자루 모양 아이콘 누르면 쿼리를 깨끗하게 정리해 줌.
+#원래 있던 컬럼 뒤에 '컬럼별칭'을 지정함.
+#원래 컬럼의 이름을 아예 바꾸는 것은 아니고 보기 편하게 잠시 바꿈.

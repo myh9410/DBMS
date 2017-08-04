@@ -1,0 +1,100 @@
+# 수정
+
+# 테이블에 데이터를 수정할 때는 update 쿼리를 사용함.
+
+# update memberTBL set memberAddress = "강서구" where memberName = "당탕이";
+위의 쿼리는 memberTBL이라는 테이블에 memberName이라는 컬럼에 값이 당탕이인 행에 memberAddress라는 컬럼에 값을 강서구로 변경하겠다. 라는 의미
+
+# update 쿼리가 mysql 로컬접속했을 때(PuTTY이용한 접근)는 되는데, Workbench에서 안되는 이유
+	Workbench에는 Safe 모드라는 것이 존재.
+	Safe 모드라는 것은 불특정 행을 대상으로 수정, 삭제를 하는 SQL을 못하게 막는 기능임..
+
+# 테이블을 만들 때 PK(기본키)(Primary Key)로 설정된 컬럼은 데이터가 중복될 수 없게 됨.
+	memberName = "당탕이";	>>> memberName이 PK가 아님. memberName이 중복될 수 있음.
+
+# Safe 모드가 실수로 여러 데이터가 수정되거나 삭제로 인해 발생되는 피해를 최소화하기 위해서 불특정 행을 대상으로 하는 수정, 삭제를 차단함.
+
+# Safe 모드가 활성화 되어 있을 때는 PK설정이 된 컬럼만 where로 조건을 걸어 수정, 삭제를 진행할 수 있음.
+
+# Safe 모드 설정을 변경하면 Workbench 로그인을 다시 해야 함.
+
+# 되도록이면 수정, 삭제를 진행할 때는 기본키가 아닌 컬럼을 where로 조건을 거는건 위험한 행위임.
+되도록 자제하고, 기본키인 컬럼으로 조건을 걸어야 함.
+
+# update memberTBL set memberAddress = "코리아학원";
+where없이 사용하면 memberTBL이라는 테이블의 모든 행의 memberAddress의 값을 "코리아학원"으로 다 바꿈.
+where를 통해서 조건을 주는 것.
+
+
+# 삭제
+
+# 테이블에 있는 특정 행을 지울 때는 delete 쿼리를 사용함.
+
+# 테이블이나 데이터베이스 자체를 지울 때는 drop 쿼리.
+
+# delete from memberTBL where memberName = "유인나";
+memberTBL이라는 테이블에 memberName이라는 컬럼에 값이 유인나인 행을 지우겠다.(여러개 있을 시 전부 삭제)
+
+
+# 삽입 : insert
+# 조회 : select
+# 수정 : update
+# 삭제 : delete
+
+#네이버, 구글 등 웹 사이트에서 회원탈퇴를 진행하면 내가 회원가입할 때 입력했던 내 정보를 탈퇴를 한다고 데이터베이스에서 안지움...
+
+#회원 데이터 백업을 수동이 아닌 자동으로 진행하기 위해 사용하는 것.	>>>	트리거
+
+#트리거라는 것은 테이블에 insert, update, delete 쿼리 중에 지정한 쿼리가 실행되기 전에 구현할 수 있음.
+
+ex)회원탈퇴하면 delete 쿼리 실행하기 전에 회원정보를 다른 곳으로 옮겨라
+
+#MySQL에 프로그램에서 회원정보 테이블에 delete 쿼리를 시도하면 실행전에 다른 회원정보 삭제 테이블로 백업을 진행한 후에 delete쿼리를 수행하게 만들게 됨.
+
+# 회원테이블에 컬럼의 자료형과 글자제한을 똑같이 회원 삭제 테이블에 컬럼을 만들 때 지정해야 함.
+
+# 회원삭제 테이블을 만들 때는 PK를 지정하게 된다면 동일한 ID에 회원이 탈퇴했을 때 문제가 발생 함...
+  그래서 회원삭제 테이블에는 PK설정을 컬럼에 하지 않는다.
+
+# 일반적으로 회원탈퇴 테이블에는 회원탈퇴를 언제 했는지 날짜를 기록함.
+
+create trigger trg_deleteMemberTBL
+	after delete#delete쿼리가 작동했을 때
+	on memberTBL#memberTBL의
+	for each row#모든 행을 대상으로
+begin
+	insert into deleteMemberTBL(
+		OLD.memberID,#위에서 지정한 테이블 즉, memberTBL(지우려고 하는 TBL)에 삭제하려고 하는 				행에 memberID컬럼의 값을 뜻함.
+		OLD.memberName,
+		OLD.memberAddress,
+
+	);
+end//
+
+#CURDATE()	>>> MySQL기본 제공. 현재 날짜를 나타내줌.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
